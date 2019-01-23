@@ -5,46 +5,14 @@ def getCommit(){
 def getBuildTimestamp(){
   return sh(returnStdout: true, script: "date +'%Y-%m-%dT%H:%M:%SZ'").trim()
 }
-def buildTrigger JenkinsAPI.thisBuild.Trigger
+
 def getVersion(){
   //sh(script: "git fetch --tags")
   return sh(returnStdout: true, script: "git describe --tags --abbrev=0").toString().trim()
 }
 
-def run_bandit_test(){
-  script{
-    env.BRANCH=env.GIT_BRANCH.toLowerCase()
-    env.COMMIT_SHA= sh(returnStdout: true, script: "git rev-parse HEAD | head -c 7").trim()
-    env.CONTAINER="bandit-test-${COMMIT_SHA}"
-    env.BANDIT_IMAGE="bandit-${BRANCH}"
-    env.BANDIT_TAG="${COMMIT_SHA}"
-  }
-     dir('bandit'){
-      sh(script:"bash ${BANDIT_DOCKER_SCRIPT}")
-    }
-    sh(script:"docker exec -i ${CONTAINER} chmod a+x /app_src/bandit/run_bandit.sh")
-    return_s= sh(returnStatus:true, script:"docker exec -i ${CONTAINER} /app_src/bandit/run_bandit.sh")
-    echo "${return_s}"
-    sh "docker rm  -f ${CONTAINER}"
-    sh "docker rmi -f ${BANDIT_IMAGE}:${BANDIT_TAG}"
-
-    if ("${return_s}" != '0') {
-      //archiveArtifacts artifacts: 'reports/banditReport.html'
-      //publish report to build page
-      publishHTML (target: [
-        allowMissing: false,
-        alwaysLinkToLastBuild: false,
-        keepAll: true,
-        reportDir: './reports',
-        reportFiles: 'banditReport.html',
-        reportName: "Bandit Report"
-      ])
-      error "Bandit test failed"
-    }
-}
 
 def getVersioningVariables(){
-  
     is_tagged=sh(returnStatus: true,returnStdout:false, script:"#!/bin/sh \n git describe --tags --abbrev=0")
 
     if ( is_tagged != '0'){
@@ -60,9 +28,6 @@ pipeline {
   environment {
       GIT_COMMIT=getCommit()
       dir=pwd()
-      INIT_GENERATOR_SCRIPT='generate-init-py.sh'
-      // Bandit Test
-        BANDIT_DOCKER_SCRIPT= 'bandit_test_docker.sh'
     }
     
     
@@ -77,7 +42,7 @@ pipeline {
       agent any
       steps{
         echo "Init Stage"
-        
+        buildTrigger = JenkinsAPI.thisBuild.Trigger
         echo buildTrigger
         getVersioningVariables()
       }
