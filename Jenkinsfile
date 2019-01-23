@@ -5,7 +5,7 @@ def getCommit(){
 def getBuildTimestamp(){
   return sh(returnStdout: true, script: "date +'%Y-%m-%dT%H:%M:%SZ'").trim()
 }
-
+def buildTrigger JenkinsAPI.thisBuild.Trigger
 def getVersion(){
   //sh(script: "git fetch --tags")
   return sh(returnStdout: true, script: "git describe --tags --abbrev=0").toString().trim()
@@ -77,7 +77,7 @@ pipeline {
       agent any
       steps{
         echo "Init Stage"
-        def buildTrigger JenkinsAPI.thisBuild.Trigger
+        
         echo buildTrigger
         getVersioningVariables()
       }
