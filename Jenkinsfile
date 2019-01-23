@@ -42,8 +42,10 @@ pipeline {
       agent any
       steps{
         echo "Init Stage"
-        buildTrigger = JenkinsAPI.thisBuild.Trigger
+        script{
+        def buildTrigger JenkinsAPI.thisBuild.Trigger
         echo buildTrigger
+        }
         getVersioningVariables()
       }
     }
