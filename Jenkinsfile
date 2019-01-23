@@ -43,7 +43,7 @@ pipeline {
       steps{
         echo "Init Stage"
         script{
-        causes = current.build.getBuildCauses()
+        causes = currentBuild.getBuildCauses
         echo causes
         }
         getVersioningVariables()
