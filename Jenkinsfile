@@ -74,7 +74,7 @@ pipeline {
       agent any
       steps{
         echo "Init Stage"
-        
+        getVersioningVariables()
       }
     }
     stage("Main Pipeline"){
