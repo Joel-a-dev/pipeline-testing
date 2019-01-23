@@ -43,9 +43,8 @@ pipeline {
       steps{
         echo "Init Stage"
         script{
-        for (cause in bld.getCauses()) {
-              echo cause
-        }
+        causes = current.build.getBuildCauses()
+        echo causes
         }
         getVersioningVariables()
       }
