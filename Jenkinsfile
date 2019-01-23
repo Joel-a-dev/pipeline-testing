@@ -44,13 +44,14 @@ def run_bandit_test(){
 }
 
 def getVersioningVariables(){
-    //sh "git fetch --tags"
-    sh "echo -e \"export GIT_COMMIT=\$(git rev-parse HEAD)\nexport GHE_VERSION=${BRANCH_NAME}\$(git rev-parse HEAD | head -c 7)\nexport BUILD_TIMESTAMP=\$(date +'%Y-%m-%dT%H:%M:%SZ')\" > .version_vars.conf"
-    sh "cat .version_vars.conf"
-    stash includes: ".version_vars.conf", name:"versionVars"
+    
+    if (sh(returnStatus: true, script:"git describe --tags --abbrev=0") != '0'){
+        sh "echo -e \"export GIT_COMMIT=\$(git rev-parse HEAD)\nexport GHE_VERSION=${SOURCE_BRANCH}-\$(git rev-parse HEAD | head -c 7)\nexport BUILD_TIMESTAMP=\$(date +'%Y-%m-%dT%H:%M:%SZ')\" > .version_vars.conf"
+    }else{
+        sh "echo -e \"export GIT_COMMIT=\$(git rev-parse HEAD)\nexport GHE_VERSION=\$(git describe --tags --abbrev=0)\nexport BUILD_TIMESTAMP=\$(date +'%Y-%m-%dT%H:%M:%SZ')\" > .version_vars.conf"
+    }
 
-    sh "echo \$(git rev-parse HEAD | head -c 7)-\$(date +%Y%m%d%H%M%S)  > .docker.tag"
-    stash includes: '.docker.tag', name: 'dockerTag'
+    stash includes: ".version_vars.conf", name:"versionVars"
 }
 
 pipeline {
