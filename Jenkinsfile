@@ -44,6 +44,7 @@ def run_bandit_test(){
 }
 
 def getVersioningVariables(){
+  
     is_tagged=sh(returnStatus: true,returnStdout:false, script:"#!/bin/sh \n git describe --tags --abbrev=0")
 
     if ( is_tagged != '0'){
@@ -64,6 +65,7 @@ pipeline {
         BANDIT_DOCKER_SCRIPT= 'bandit_test_docker.sh'
     }
     
+    
   stages {
     stage("env"){
       agent any
@@ -75,6 +77,8 @@ pipeline {
       agent any
       steps{
         echo "Init Stage"
+        def buildTrigger JenkinsAPI.thisBuild.Trigger
+        echo buildTrigger
         getVersioningVariables()
       }
     }
