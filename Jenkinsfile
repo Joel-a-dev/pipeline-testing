@@ -44,7 +44,6 @@ pipeline {
         echo "Init Stage"
         script{
         println "${currentBuild.getBuildCauses()}"
-        echo causes
         }
         getVersioningVariables()
       }
