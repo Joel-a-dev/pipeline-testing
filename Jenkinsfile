@@ -43,8 +43,9 @@ pipeline {
       steps{
         echo "Init Stage"
         script{
-        def buildTrigger JenkinsAPI.thisBuild.Trigger
-        echo buildTrigger
+        for (cause in bld.getCauses()) {
+              echo cause
+        }
         }
         getVersioningVariables()
       }
