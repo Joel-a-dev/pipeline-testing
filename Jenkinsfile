@@ -44,15 +44,13 @@ def run_bandit_test(){
 }
 
 def getVersioningVariables(){
-  script{
-    is_tagged=sh(returnStatus: true,returnStdout:false, script:"git describe --tags --abbrev=0")
+    is_tagged=sh(returnStatus: true,returnStdout:false, script:"#!/bin/bash \n git describe --tags --abbrev=0")
 
     if ( is_tagged != '0'){
         sh "echo -e \"export GIT_COMMIT=\$(git rev-parse HEAD)\nexport GHE_VERSION=${SOURCE_BRANCH}-\$(git rev-parse HEAD | head -c 7)\nexport BUILD_TIMESTAMP=\$(date +'%Y-%m-%dT%H:%M:%SZ')\" > .version_vars.conf"
     }else{
         sh "echo -e \"export GIT_COMMIT=\$(git rev-parse HEAD)\nexport GHE_VERSION=\$(git describe --tags --abbrev=0)\nexport BUILD_TIMESTAMP=\$(date +'%Y-%m-%dT%H:%M:%SZ')\" > .version_vars.conf"
     }
-  }
     stash includes: ".version_vars.conf", name:"versionVars"
 }
 
