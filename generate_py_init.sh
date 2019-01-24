@@ -8,7 +8,7 @@
 if $(git describe --tags --abbrev=0); then
     GHE_VERSION="$(git describe --tags --abbrev=0)"
 else
-    GHE_VERSION="${SOURCE_BRANCH}-$(git rev-parse HEAD | head -c 7)"
+    GHE_VERSION="${BRANCH_NAME}-$(git rev-parse HEAD | head -c 7)"
 fi
 
 GIT_COMMIT=$(git rev-parse HEAD)
