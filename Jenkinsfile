@@ -45,7 +45,7 @@ pipeline {
         echo "Init Stage"
         getVersioningVariables()
         sh "cat .version_vars.conf"
-        sh "${PY_GEN_SCRIPT}"
+        sh "bash ${PY_GEN_SCRIPT}"
         sh "cat ___init___.py"
       }
     }
