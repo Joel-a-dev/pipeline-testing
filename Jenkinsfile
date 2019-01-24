@@ -12,7 +12,7 @@ def getVersion(){
 }
 
 def getVersioningVariables(){
-    is_tagged=sh(returnStatus: true,returnStdout:false, script:"#!/bin/sh \n git describe --tags --abbrev=0")
+    is_tagged=sh(returnStatus: true,returnStdout:false, script:"#!/bin/sh \n git describe --tags --abbrev=0").trim()
 
     if ( is_tagged != '0'){
       current_version=sh(returnStdout:true,script:"echo \$(cat package.json | grep version | head -1 | awk -F: '{ print \$2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')")
