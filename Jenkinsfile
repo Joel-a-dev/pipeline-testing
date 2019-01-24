@@ -36,8 +36,9 @@ pipeline {
       agent any
       steps{
         echo sh(returnStdout: true, script: 'env')
+        sh "echo ${currentBuild.buildCauses}"
       }
-      sh "echo ${currentBuild.buildCauses}"
+      
     }
     stage("Init"){
       agent any
