@@ -28,6 +28,7 @@ pipeline {
   environment {
       GIT_COMMIT=getCommit()
       dir=pwd()
+      PY_GEN_SCRIPT='generate_py_init.sh'
     }
     
     
@@ -42,11 +43,10 @@ pipeline {
       agent any
       steps{
         echo "Init Stage"
-        script{
-        println "${currentBuild.getBuildCauses()}"
-        println "PR"
-        }
         getVersioningVariables()
+        sh "cat .version_vars.conf"
+        sh "${PY_GEN_SCRIPT}"
+        sh "cat ___init___.py"
       }
     }
     stage("Main Pipeline"){
