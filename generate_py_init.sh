@@ -12,7 +12,7 @@ else
                     | grep version \
                     | head -1 \
                     | awk -F: '{ print $2 }' \
-                    | sed 's/[",]//g'
+                    | sed 's/[",]//g' \
                     | tr -d '[[:space:]]')
 
     GHE_VERSION="${CURRENT_VERSION}-${BRANCH_NAME}-$(git rev-parse HEAD | head -c 7)"

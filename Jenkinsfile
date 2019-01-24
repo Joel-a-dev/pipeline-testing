@@ -11,7 +11,6 @@ def getVersion(){
   return sh(returnStdout: true, script: "git describe --tags --abbrev=0").toString().trim()
 }
 
-
 def getVersioningVariables(){
     is_tagged=sh(returnStatus: true,returnStdout:false, script:"#!/bin/sh \n git describe --tags --abbrev=0")
 
