@@ -1,5 +1,7 @@
 def getCommit(){
   return sh(returnStdout: true, script: "git rev-parse HEAD | head -c 7").trim()
+  
+  
 }
 
 def getBuildTimestamp(){
